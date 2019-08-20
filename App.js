@@ -25,10 +25,16 @@ export default class LoginView extends Component {
   }
 
   render() {
+    let pic = {
+      uri: 'https://s3-eu-west-1.amazonaws.com/cdn.supporthero.io/article/323/56a919b5-2be9-4cc6-adb9-c89b4693a74e.jpg'
+    };
     return (
       <View style={styles.container}>
+        <View style={{width: '70%'}}>
+          <Image source={pic} style={{width: '100%', height: 100}}/>
+        </View>
         <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
+          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/email-sign.png'}}/>
           <TextInput style={styles.inputs}
               placeholder="Email"
               keyboardType="email-address"
@@ -37,7 +43,7 @@ export default class LoginView extends Component {
         </View>
         
         <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
+          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/password.png'}}/>
           <TextInput style={styles.inputs}
               placeholder="Password"
               secureTextEntry={true}
@@ -46,15 +52,15 @@ export default class LoginView extends Component {
         </View>
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
-          <Text style={styles.loginText}>Login</Text>
+          <Text style={{color: '#FFFFFF'}}>Login</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text>Forgot your password?</Text>
+            <Text style={styles.loginText}>Forgot your password?</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text>Register</Text>
+            <Text style={styles.loginText}>Register</Text>
         </TouchableHighlight>
       </View>
     );
@@ -66,13 +72,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#FFFFFF',
   },
   inputContainer: {
-      borderBottomColor: '#F5FCFF',
+      borderColor: '#7b1fa2',
       backgroundColor: '#FFFFFF',
       borderRadius:30,
-      borderBottomWidth: 1,
+      borderWidth: 1,
       width:250,
       height:45,
       marginBottom:20,
@@ -101,9 +107,9 @@ const styles = StyleSheet.create({
     borderRadius:30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
+    backgroundColor: "#7b1fa2",
   },
   loginText: {
-    color: 'white',
+    color: '#7b1fa2',
   }
 });
