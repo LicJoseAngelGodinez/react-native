@@ -20,6 +20,10 @@ export default class LoginView extends Component {
     }
   }
 
+  onBlurMail = ( email ) => {
+    Alert.alert('Email ingresado', 'El correo que se ingres&oacute; es:' + email);
+  }
+
   onClickListener = (viewId) => {
     Alert.alert("Alert", "Button pressed "+viewId);
   }
@@ -39,7 +43,8 @@ export default class LoginView extends Component {
               placeholder="Email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}/>
+              onChangeText={(email) => this.setState({email})}
+              onBlur={(email) => this.onBlurMail(this.setState({email}))}/>
         </View>
         
         <View style={styles.inputContainer}>
