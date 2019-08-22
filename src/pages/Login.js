@@ -1,66 +1,125 @@
 import React, { Component } from 'react';
 import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
-    TouchableHighlight,
-    Alert,
-    AsyncStorage,
-    Keyboard,
-    Button
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableHighlight,
+  Image,
+  Alert,
+  Keyboard
 } from 'react-native';
 
-import { Actions } from 'react-native-router-flux';
-import Form from '../components/Form';
+export default class LoginView extends Component {
 
-export default class Login extends Component {
-
-    signup() {
-        Actions.signup()
+  constructor(props) {
+    super(props);
+    state = {
+      email   : '',
+      password: '',
     }
+  }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>{'\n'}</Text>
-                <Text>{'\n'}</Text>
+  onBlurMail = ( ) => {
+    const { email } = this.state;
 
-                <Form type="Login" />
+    //var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    Alert.alert('Email ingresado', 'El correo que se ingresó es: ' + email);
+  }
 
-                <View style={styles.signupTextCont}>
-                    <Text style={styles.signupText}>A�n no tienes cuenta? </Text>
-                    <TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}>Registrarse</Text></TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
+  onClickListener = (viewId) => {
+    Keyboard.dismiss();
+    Alert.alert("Alert", "Button pressed "+viewId);
+  }
+
+  render() {
+    let pic = {
+      uri: 'https://s3-eu-west-1.amazonaws.com/cdn.supporthero.io/article/323/56a919b5-2be9-4cc6-adb9-c89b4693a74e.jpg'
+    };
+    return (
+      <View style={styles.container}>
+        <View style={{width: '70%'}}>
+          <Image source={pic} style={{width: '100%', height: 100}}/>
+        </View>
+        <View style={styles.inputContainer}>
+          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/email-sign.png'}}/>
+          <TextInput style={styles.inputs}
+              placeholder="Correo"
+              keyboardType="email-address"
+              underlineColorAndroid='transparent'
+              onChangeText={(email) => this.setState({email})}
+              onBlur={ (email) => this.onBlurMail()}/>
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/password.png'}}/>
+          <TextInput style={styles.inputs}
+              placeholder="Contraseña"
+              secureTextEntry={true}
+              underlineColorAndroid='transparent'
+              onChangeText={(password) => this.setState({password})}/>
+        </View>
+
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
+          <Text style={{color: '#FFFFFF'}}>Entrar</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
+            <Text style={styles.loginText}>Olvidó su contraseña?</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
+            <Text style={styles.loginText}>Registro</Text>
+        </TouchableHighlight>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-    signupTextCont: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        paddingVertical: 16,
-        flexDirection: 'row'
-    },
-    signupText: {
-        color: '#7b1fa2',
-        fontSize: 16
-    },
-    signupButton: {
-        color: '#7b1fa2',
-        fontSize: 16,
-        fontWeight: '500'
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  inputContainer: {
+      borderColor: '#7b1fa2',
+      backgroundColor: '#FFFFFF',
+      borderRadius:30,
+      borderWidth: 1,
+      width:250,
+      height:45,
+      marginBottom:20,
+      flexDirection: 'row',
+      alignItems:'center'
+  },
+  inputs:{
+      height:45,
+      marginLeft:16,
+      borderBottomColor: '#FFFFFF',
+      flex:1,
+  },
+  inputIcon:{
+    width:30,
+    height:30,
+    marginLeft:15,
+    justifyContent: 'center'
+  },
+  buttonContainer: {
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:250,
+    borderRadius:30,
+  },
+  loginButton: {
+    backgroundColor: "#7b1fa2",
+  },
+  loginText: {
+    color: '#7b1fa2',
+  }
 });
-
-
