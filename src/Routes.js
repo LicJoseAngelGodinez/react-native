@@ -9,16 +9,17 @@ export default class Routes extends Component {
     render() {
         return (
             <Router barButtonIconStyle ={styles.barButtonIconStyle}
-                hideNavBar={false} 
+                hideNavBar={true} 
                 navigationBarStyle={{backgroundColor: '#1565c0',}} 
                 titleStyle={{color: 'white',}}
             >
                 <Stack key="root">
-                <Scene key="login" component={Login} title="Login"/>
+                <Scene key="login" component={Login}
+                title="Inicio"/>
                 <Scene key="signup" component={Signup} title="Sign up"/>
                 </Stack>
             </Router>
-        );
+        )
     }
 }
 
