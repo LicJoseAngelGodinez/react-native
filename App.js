@@ -7,7 +7,8 @@ import {
   Button,
   TouchableHighlight,
   Image,
-  Alert
+  Alert,
+  Keyboard
 } from 'react-native';
 
 export default class LoginView extends Component {
@@ -28,6 +29,7 @@ export default class LoginView extends Component {
   }
 
   onClickListener = (viewId) => {
+    Keyboard.dismiss();
     Alert.alert("Alert", "Button pressed "+viewId);
   }
 

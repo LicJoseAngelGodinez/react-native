@@ -4,9 +4,10 @@ import {
     Text,
     View,
     TextInput,
-    TouchableOpacity,
+    TouchableHighlight,
     AsyncStorage,
-    Keyboard
+    Keyboard,
+    Alert
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
