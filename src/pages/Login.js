@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   Button,
+  AsyncStorage,
   TouchableHighlight,
   Image,
   Alert,
@@ -21,16 +22,49 @@ export default class LoginView extends Component {
     }
   }
 
-  onBlurMail = ( ) => {
-    const { email } = this.state;
-
-    //var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    Alert.alert('Email ingresado', 'El correo que se ingresó es: ' + email);
-  }
-
   onClickListener = (viewId) => {
     Keyboard.dismiss();
     Alert.alert("Alert", "Button pressed "+viewId);
+  }
+
+  login = () => {
+
+    const { token } = this.state;
+
+    //Alert.alert('Datos',token);
+
+    Keyboard.dismiss();
+
+    let urlIntegracion = 'https://api.salesup.com/integraciones/sesion';
+
+    let dataHeader = {
+      method: 'POST',
+      headers: {
+        token: token
+      }
+    };
+
+      fetch(urlIntegracion, dataHeader)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson[0].token);
+
+          if ( responseJson[0].token ) {
+
+            AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0].token));
+            return this.props.navigation.navigate('Home');
+
+          } else {
+
+            Alert.alert('Oops!', 'Verifica de nuevo tu token ya que no se encuentra el registro.');
+            return false;
+
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          
+        });
   }
 
   render() {
@@ -43,25 +77,16 @@ export default class LoginView extends Component {
           <Image source={pic} style={{width: '100%', height: 100}}/>
         </View>
         <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/email-sign.png'}}/>
-          <TextInput style={styles.inputs}
-              placeholder="Correo"
-              keyboardType="email-address"
-              underlineColorAndroid='transparent'
-              onChangeText={(email) => this.setState({email})}
-              onBlur={ (email) => this.onBlurMail()}/>
-        </View>
-        
-        <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/password.png'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Contraseña"
-              secureTextEntry={true}
+              placeholder="Token de integraci�n"
+              keyboardType="ascii-capable"
               underlineColorAndroid='transparent'
-              onChangeText={(password) => this.setState({password})}/>
+              onChangeText={(token) => this.setState({token})}
+              />
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
           <Text style={{color: '#FFFFFF'}}>Entrar</Text>
         </TouchableHighlight>
 
