@@ -20,8 +20,11 @@ export default class LoginView extends Component {
     }
   }
 
-  onBlurMail = ( email ) => {
-    Alert.alert('Email ingresado', 'El correo que se ingres&oacute; es:' + email);
+  onBlurMail = ( ) => {
+    const { email } = this.state;
+
+    //var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    Alert.alert('Email ingresado', 'El correo que se ingresó es: ' + email);
   }
 
   onClickListener = (viewId) => {
@@ -40,32 +43,32 @@ export default class LoginView extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/email-sign.png'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Email"
+              placeholder="Correo"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}
-              onBlur={(email) => this.onBlurMail(this.setState({email}))}/>
+              onBlur={ (email) => this.onBlurMail()}/>
         </View>
         
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/password.png'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Password"
+              placeholder="Contraseña"
               secureTextEntry={true}
               underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
         </View>
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('login')}>
-          <Text style={{color: '#FFFFFF'}}>Login</Text>
+          <Text style={{color: '#FFFFFF'}}>Entrar</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text style={styles.loginText}>Forgot your password?</Text>
+            <Text style={styles.loginText}>Olvidó su contraseña?</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text style={styles.loginText}>Register</Text>
+            <Text style={styles.loginText}>Registro</Text>
         </TouchableHighlight>
       </View>
     );
