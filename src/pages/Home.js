@@ -6,20 +6,20 @@ export default class Home extends React.Component {
   static navigationOptions = () => ({
     headerTintColor: 'white',
     title: 'Inicio',
-    headerTitleStyle : {
+    headerTitleStyle: {
       textAlign: 'center',
-      alignSelf:'center',
+      alignSelf: 'center',
       color: 'white'
     },
-    headerStyle:{
-      backgroundColor:'#7b1fa2',
+    headerStyle: {
+      backgroundColor: '#7b1fa2',
     },
-    });
+  });
 
   render() {
     return (
       <View style={styles.container}>
-          <Text>Has entrado!</Text>
+        <Text>Has entrado!</Text>
       </View>
     );
   }

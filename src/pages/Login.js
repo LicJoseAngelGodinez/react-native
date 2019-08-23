@@ -17,54 +17,57 @@ export default class LoginView extends Component {
   constructor(props) {
     super(props);
     state = {
-      email   : '',
+      email: '',
       password: '',
     }
   }
 
   onClickListener = (viewId) => {
     Keyboard.dismiss();
-    Alert.alert("Alert", "Button pressed "+viewId);
+    Alert.alert("Alert", "Button pressed " + viewId);
   }
 
   login = () => {
 
-    const { token } = this.state;
+    const { user, password } = this.state;
 
     //Alert.alert('Datos',token);
 
     Keyboard.dismiss();
 
-    let urlIntegracion = 'https://api.salesup.com/integraciones/sesion';
+    let urlIntegracion = 'https://api.salesup.com/login';
+    let formData = new FormData();
+
+    formData.append('usuario', user);
+    formData.append('contrasenia', password);
 
     let dataHeader = {
       method: 'POST',
-      headers: {
-        token: token
-      }
+      body: formData
     };
 
-      fetch(urlIntegracion, dataHeader)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log(responseJson[0].token);
+    fetch(urlIntegracion, dataHeader)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson[0].token);
 
-          if ( responseJson[0].token ) {
+        if (responseJson[0].tkSesion) {
 
-            AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0].token));
-            return this.props.navigation.navigate('Home');
+          console.log({DATOS: responseJson[0]});
+          AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0]));
+          return this.props.navigation.navigate('Home');
 
-          } else {
+        } else {
 
-            Alert.alert('Oops!', 'Verifica de nuevo tu token ya que no se encuentra el registro.');
-            return false;
+          Alert.alert('Acceso', 'El usuario y/o clave no es correcto.');
+          return false;
 
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          
-        });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+
+      });
   }
 
   render() {
@@ -73,29 +76,39 @@ export default class LoginView extends Component {
     };
     return (
       <View style={styles.container}>
-        <View style={{width: '70%'}}>
-          <Image source={pic} style={{width: '100%', height: 100}}/>
+        <View style={{ width: '70%' }}>
+          <Image source={pic} style={{ width: '100%', height: 100 }} />
         </View>
         <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://img.icons8.com/nolan/64/000000/password.png'}}/>
+          <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/email.png' }} />
           <TextInput style={styles.inputs}
-              placeholder="Token de integraci�n"
-              keyboardType="ascii-capable"
-              underlineColorAndroid='transparent'
-              onChangeText={(token) => this.setState({token})}
-              />
+            placeholder="Usuario"
+            keyboardType="email-address"
+            underlineColorAndroid='transparent'
+            onChangeText={(user) => this.setState({ user })}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/password.png' }} />
+          <TextInput style={styles.inputs}
+            placeholder="Clave de acceso"
+            secureTextEntry={true}
+            underlineColorAndroid='transparent'
+            onChangeText={(password) => this.setState({ password })}
+          />
         </View>
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
-          <Text style={{color: '#FFFFFF'}}>Entrar</Text>
+          <Text style={{ color: '#FFFFFF' }}>Entrar</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-            <Text style={styles.loginText}>Olvidó su contraseña?</Text>
+          <Text style={styles.loginText}>Olvidó su contraseña?</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-            <Text style={styles.loginText}>Registro</Text>
+          <Text style={styles.loginText}>Registro</Text>
         </TouchableHighlight>
       </View>
     );
@@ -110,36 +123,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   inputContainer: {
-      borderColor: '#7b1fa2',
-      backgroundColor: '#FFFFFF',
-      borderRadius:30,
-      borderWidth: 1,
-      width:250,
-      height:45,
-      marginBottom:20,
-      flexDirection: 'row',
-      alignItems:'center'
+    borderColor: '#7b1fa2',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    borderWidth: 1,
+    width: 250,
+    height: 45,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  inputs:{
-      height:45,
-      marginLeft:16,
-      borderBottomColor: '#FFFFFF',
-      flex:1,
+  inputs: {
+    height: 45,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1,
   },
-  inputIcon:{
-    width:30,
-    height:30,
-    marginLeft:15,
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
     justifyContent: 'center'
   },
   buttonContainer: {
-    height:45,
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom:20,
-    width:250,
-    borderRadius:30,
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
   },
   loginButton: {
     backgroundColor: "#7b1fa2",
