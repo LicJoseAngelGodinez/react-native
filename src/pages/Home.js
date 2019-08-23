@@ -90,10 +90,10 @@ export default class Home extends React.Component {
     if (username != null) {
       return (
         <View style={styles.container}>
-          <View style={{ width: '50%', height: '50%' }}>
+          <View style={{ width: 80, height: 80 }}>
             <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
           </View>
-          <Text>Saludos {username}, Has entrado!</Text>
+          <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"} Has entrado!</Text>
         </View>
       );
     }
