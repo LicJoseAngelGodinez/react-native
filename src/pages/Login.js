@@ -4,22 +4,38 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   AsyncStorage,
   TouchableHighlight,
   Image,
   Alert,
-  Keyboard
+  Keyboard,
+  AppRegistry,
+  ActivityIndicator
 } from 'react-native';
 
 export default class LoginView extends Component {
 
   constructor(props) {
     super(props);
-    state = {
+    this.state = {
       email: '',
       password: '',
+      isLoading: false,
+      Isbuttonenable: false
     }
+  }
+
+  ShowHideActivityIndicator = () => {
+
+    if (this.state.isLoading == true) {
+      this.setState({ isLoading: false });
+      this.setState({ Isbuttonenable : false });
+    }
+    else {
+      this.setState({ isLoading: true });
+      this.setState({ Isbuttonenable : true });
+    }
+
   }
 
   onClickListener = (viewId) => {
@@ -30,6 +46,8 @@ export default class LoginView extends Component {
   login = () => {
 
     const { user, password } = this.state;
+
+    this.ShowHideActivityIndicator();
 
     //Alert.alert('Datos',token);
 
@@ -53,20 +71,20 @@ export default class LoginView extends Component {
 
         if (responseJson[0].tkSesion) {
 
-          console.log({DATOS: responseJson[0]});
+          console.log({ DATOS: responseJson[0] });
           AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0]));
           return this.props.navigation.navigate('Home');
 
         } else {
-
+          this.ShowHideActivityIndicator();
           Alert.alert('Acceso', 'El usuario y/o clave no es correcto.');
           return false;
 
         }
       })
       .catch((error) => {
-        console.error(error);
-
+        this.ShowHideActivityIndicator();
+        Alert.alert('Conexión', 'Al parecer hay un problema en la conexión, revisa tu acceso a datos o wifi.');
       });
   }
 
@@ -76,6 +94,11 @@ export default class LoginView extends Component {
     };
     return (
       <View style={styles.container}>
+
+        {
+          this.state.isLoading ? <ActivityIndicator size="large" color="#7b1fa2" style={{ padding: 20 }} /> : null
+        }
+
         <View style={{ width: '70%' }}>
           <Image source={pic} style={{ width: '100%', height: 100 }} />
         </View>
@@ -99,7 +122,10 @@ export default class LoginView extends Component {
           />
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
+        <TouchableHighlight 
+          disabled={this.state.Isbuttonenable}
+          style={!this.state.Isbuttonenable ? [styles.buttonContainer, styles.loginButton] : [styles.buttonContainer, styles.loginButtonDisabled]}
+          onPress={() => this.login()}>
           <Text style={{ color: '#FFFFFF' }}>Entrar</Text>
         </TouchableHighlight>
 
@@ -110,6 +136,7 @@ export default class LoginView extends Component {
         <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
           <Text style={styles.loginText}>Registro</Text>
         </TouchableHighlight>
+
       </View>
     );
   }
@@ -156,6 +183,9 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#7b1fa2",
+  },
+  loginButtonDisabled: {
+    backgroundColor: "#CDCDCD",
   },
   loginText: {
     color: '#7b1fa2',
