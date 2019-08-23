@@ -9,7 +9,6 @@ import {
   Image,
   Alert,
   Keyboard,
-  AppRegistry,
   ActivityIndicator
 } from 'react-native';
 
@@ -21,26 +20,42 @@ export default class LoginView extends Component {
       email: '',
       password: '',
       isLoading: false,
-      Isbuttonenable: false
+      Isbuttonenable: false,
+      credentials : ''
     }
   }
+
+  async loadCredentials() {
+    try {
+        const credentials = await AsyncStorage.getItem('userData');
+        if ( this.state.credentials.tkSesion ) {
+
+          this.props.navigation.navigate('Home');
+
+        }
+        
+    }
+    catch (error) {
+        // Manage error handling
+    }
+}
 
   ShowHideActivityIndicator = () => {
 
     if (this.state.isLoading == true) {
       this.setState({ isLoading: false });
-      this.setState({ Isbuttonenable : false });
+      this.setState({ Isbuttonenable: false });
     }
     else {
       this.setState({ isLoading: true });
-      this.setState({ Isbuttonenable : true });
+      this.setState({ Isbuttonenable: true });
     }
 
   }
 
   onClickListener = (viewId) => {
     Keyboard.dismiss();
-    Alert.alert("Alert", "Button pressed " + viewId);
+    Alert.alert("Alerta", "Has presionado: " + viewId);
   }
 
   login = () => {
@@ -49,12 +64,17 @@ export default class LoginView extends Component {
 
     this.ShowHideActivityIndicator();
 
-    //Alert.alert('Datos',token);
-
     Keyboard.dismiss();
 
     let urlIntegracion = 'https://api.salesup.com/login';
     let formData = new FormData();
+
+    if ( user == '' && password == '' ) {
+
+      user = 'angel@prueba.com';
+      password = 'Salesup2016!'
+
+    }
 
     formData.append('usuario', user);
     formData.append('contrasenia', password);
@@ -72,7 +92,8 @@ export default class LoginView extends Component {
         if (responseJson[0].tkSesion) {
 
           console.log({ DATOS: responseJson[0] });
-          AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0]));
+          AsyncStorage.setItem('userData', JSON.stringify(responseJson[0]));
+          this.ShowHideActivityIndicator();
           return this.props.navigation.navigate('Home');
 
         } else {
@@ -107,7 +128,7 @@ export default class LoginView extends Component {
           <TextInput style={styles.inputs}
             placeholder="Usuario"
             keyboardType="email-address"
-            underlineColorAndroid='transparent'
+            autoCapitalize = 'none'
             onChangeText={(user) => this.setState({ user })}
           />
         </View>
@@ -117,24 +138,30 @@ export default class LoginView extends Component {
           <TextInput style={styles.inputs}
             placeholder="Clave de acceso"
             secureTextEntry={true}
-            underlineColorAndroid='transparent'
+            autoCapitalize = 'none'
             onChangeText={(password) => this.setState({ password })}
           />
         </View>
 
-        <TouchableHighlight 
+        <TouchableHighlight
           disabled={this.state.Isbuttonenable}
           style={!this.state.Isbuttonenable ? [styles.buttonContainer, styles.loginButton] : [styles.buttonContainer, styles.loginButtonDisabled]}
           onPress={() => this.login()}>
           <Text style={{ color: '#FFFFFF' }}>Entrar</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-          <Text style={styles.loginText}>Olvidó su contraseña?</Text>
+        <TouchableHighlight
+          disabled={this.state.Isbuttonenable}
+          style={styles.buttonContainer}
+          onPress={() => this.onClickListener('recuperar_contrasenia')}>
+          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>Olvidó su contraseña?</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-          <Text style={styles.loginText}>Registro</Text>
+        <TouchableHighlight
+          disabled={this.state.Isbuttonenable}
+          style={styles.buttonContainer}
+          onPress={() => this.onClickListener('registro')}>
+          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>Registro</Text>
         </TouchableHighlight>
 
       </View>
@@ -163,7 +190,6 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
@@ -189,5 +215,8 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: '#7b1fa2',
+  },
+  loginTextDisabled: {
+    color: '#CDCDCD',
   }
 });
