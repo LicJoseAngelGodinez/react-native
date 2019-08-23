@@ -93,7 +93,7 @@ export default class Home extends React.Component {
           <View style={{ width: 80, height: 80 }}>
             <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
           </View>
-          <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"} Has entrado!</Text>
+          <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
         </View>
       );
     }
