@@ -105,7 +105,7 @@ export default class LoginView extends Component {
       })
       .catch((error) => {
         this.ShowHideActivityIndicator();
-        Alert.alert('Conexión', 'Al parecer hay un problema en la conexión, revisa tu acceso a datos o wifi.');
+        Alert.alert('Conexiï¿½n', 'Al parecer hay un problema en la conexiï¿½n, revisa tu acceso a datos o wifi.');
       });
   }
 

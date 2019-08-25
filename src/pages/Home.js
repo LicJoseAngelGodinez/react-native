@@ -43,30 +43,30 @@ export default class Home extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
-  static navigationOptions = () => ({
-    headerTintColor: 'white',
-    title: 'Inicio',
-    headerTitleStyle: {
-      textAlign: 'center',
-      alignSelf: 'center',
-      color: 'white'
-    },
-    headerStyle: {
-      backgroundColor: '#7b1fa2',
-    },
-  });
+  // static navigationOptions = () => ({
+  //   headerTintColor: 'white',
+  //   title: 'Inicio',
+  //   headerTitleStyle: {
+  //     textAlign: 'center',
+  //     alignSelf: 'center',
+  //     color: 'white'
+  //   },
+  //   headerStyle: {
+  //     backgroundColor: '#7b1fa2',
+  //   },
+  // });
 
   handleBackButtonClick() {
 
     Alert.alert(
       'Cerrar',
-      'Va a cerrar sesión, desea continuar?',
+      'Va a cerrar sesiï¿½n, desea continuar?',
       [
         {
           text: 'Cancelar',
           onPress: () => {
-            this.remove_user();
-            console.log('Canceló');
+            //this.remove_user();
+            console.log('Cancelï¿½');
           },
           style: 'cancel',
         },
