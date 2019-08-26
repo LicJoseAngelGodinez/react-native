@@ -149,8 +149,9 @@ export default class Home extends React.Component {
                 backgroundColor: AnimateHeaderBackgroundColor,
               },
             ]}>
+              
             <Text style={styles.HeaderInsideText}>
-              {entities.decode('SuForms')}
+              {entities.decode('SalesUp! Forms')}
           </Text>
           </Animated.View>
           <ScrollView
@@ -196,7 +197,7 @@ export default class Home extends React.Component {
                 style={styles.ImageIconStyle} 
                 />
       
-              <Text style={styles.TextStyle}> Configuracion </Text>
+              <Text style={styles.TextStyle}> {entities.decode('Configuraci&oacute;n')} </Text>
       
             </TouchableOpacity>
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
@@ -302,17 +303,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: .5,
     borderColor: '#7b1fa2',
-    height: 60,
+    height: 100,
     borderRadius: 5 ,
     margin: 5,
-   
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    elevation: 3, // Android   
   },
    
   ImageIconStyle: {
      padding: 20,
      margin: 5,
-     height: '90%',
-     width: vw(13),
+     height: 40,
+     width: 40,
      resizeMode : 'stretch',
    
   },

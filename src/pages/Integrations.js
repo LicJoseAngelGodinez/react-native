@@ -165,7 +165,7 @@ export default class Home extends React.Component {
                 style={styles.ImageIconStyle} 
                 />
       
-              <Text style={styles.TextStyle}> Configuracion </Text>
+              <Text style={styles.TextStyle}> {entities.decode('Configuraci&oacute;n')} </Text>
       
             </TouchableOpacity>
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
@@ -273,8 +273,7 @@ const styles = StyleSheet.create({
     borderColor: '#7b1fa2',
     height: 60,
     borderRadius: 5 ,
-    margin: 5,
-   
+    margin: 3,   
   },
    
   ImageIconStyle: {
