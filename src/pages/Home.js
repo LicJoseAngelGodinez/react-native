@@ -10,7 +10,7 @@ import {
   ScrollView,
   Animated,
   Platform,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
@@ -149,21 +149,75 @@ export default class Home extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <Text style={styles.TextViewStyle}>Text</Text>
-            <Text style={styles.TextViewStyle}>Input</Text>
-            <Text style={styles.TextViewStyle}>Button</Text>
-            <Text style={styles.TextViewStyle}>Card</Text>
-            <Text style={styles.TextViewStyle}>CheckBox</Text>
-            <Text style={styles.TextViewStyle}>Divider</Text>
-            <Text style={styles.TextViewStyle}>Holi</Text>
-            <Text style={styles.TextViewStyle}>List Item</Text>
-            <Text style={styles.TextViewStyle}>Pricing</Text>
-            <Text style={styles.TextViewStyle}>Rating</Text>
-            <Text style={styles.TextViewStyle}>Search Bar</Text>
-            <Text style={styles.TextViewStyle}>Slider</Text>
-            <Text style={styles.TextViewStyle}>Tile</Text>
-            <Text style={styles.TextViewStyle}>Icon</Text>
-            <Text style={styles.TextViewStyle}>Avatar</Text>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+              <Text style={styles.TextStyle}> Integraciones </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Formularios </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Nuevo formulario </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Configuracion </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Opciones extra 1 </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Opciones extra 2 </Text>
+      
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
+ 
+              <Image 
+                source={require('../../assets/icon00-64.png')} 
+                style={styles.ImageIconStyle} 
+                />
+      
+              <Text style={styles.TextStyle}> Opciones extra 3 </Text>
+      
+            </TouchableOpacity>
           </ScrollView>
 
         </View>
@@ -231,7 +285,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 
-  buttonText: {
+  FacebookStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: .5,
+    borderColor: '#7b1fa2',
+    height: 60,
+    borderRadius: 5 ,
+    margin: 5,
+   
+  },
+   
+  ImageIconStyle: {
+     padding: 20,
+     margin: 5,
+     height: '90%',
+     width: vw(13),
+     resizeMode : 'stretch',
+   
+  },
+   
+  TextStyle :{
+   
+    fontSize: vmax(2.5),
+    color: "#7b1fa2",
+    marginBottom : 4,
+    marginRight :20,
     
   },
 });
