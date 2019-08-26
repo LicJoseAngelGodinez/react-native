@@ -46,16 +46,6 @@ export default class Home extends React.Component {
     }
   }
 
-  // remove_user = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('userData');
-  //     return true;
-  //   }
-  //   catch (exception) {
-  //     return false;
-  //   }
-  // };
-
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
@@ -63,19 +53,6 @@ export default class Home extends React.Component {
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
-
-  // static navigationOptions = () => ({
-  //   headerTintColor: 'white',
-  //   title: 'Inicio',
-  //   headerTitleStyle: {
-  //     textAlign: 'center',
-  //     alignSelf: 'center',
-  //     color: 'white'
-  //   },
-  //   headerStyle: {
-  //     backgroundColor: '#7b1fa2',
-  //   },
-  // });
 
   handleBackButtonClick() {
 
@@ -86,7 +63,6 @@ export default class Home extends React.Component {
         {
           text: 'Cancelar',
           onPress: () => {
-            //this.remove_user();
             console.log(entities.decode('Cancel&oacute;'));
           },
           style: 'cancel',
@@ -167,11 +143,6 @@ export default class Home extends React.Component {
           </ScrollView>
 
         </View>
-        // <View style={{ width: 80, height: 80 }}>
-        //   <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
-        // </View>
-        // <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
-        // </View>
       );
     } else {
       return (
@@ -201,7 +172,6 @@ const styles = StyleSheet.create({
   HeaderInsideText: {
     color: '#fff',
     fontSize: RFValue(25),
-    // fontWeight: "bold",
     textAlign: 'center',
   },
 
