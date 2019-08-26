@@ -110,9 +110,6 @@ export default class LoginView extends Component {
   }
 
   render() {
-    let pic = {
-      uri: 'https://s3-eu-west-1.amazonaws.com/cdn.supporthero.io/article/323/56a919b5-2be9-4cc6-adb9-c89b4693a74e.jpg'
-    };
     return (
       <View style={styles.container}>
 
@@ -121,7 +118,7 @@ export default class LoginView extends Component {
         }
 
         <View style={{ width: '70%' }}>
-          <Image source={pic} style={{ width: '100%', height: 100 }} />
+          <Image source={require('../../assets/letter-logo.jpg')} style={{ width: '100%', height: 100 }} />
         </View>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/email.png' }} />
