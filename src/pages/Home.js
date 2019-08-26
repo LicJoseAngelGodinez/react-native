@@ -124,7 +124,7 @@ export default class Home extends React.Component {
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
 
-        outputRange: ['#7b1fa2', '#00BCD4'],
+        outputRange: ['#7b1fa2', '#FFF'],
 
         extrapolate: 'clamp'
       });
