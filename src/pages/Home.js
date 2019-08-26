@@ -11,10 +11,15 @@ import {
   Animated,
   Platform,
 } from 'react-native';
+import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import Entities from 'html-entities';
+
+const entities = new Entities.AllHtmlEntities();
 
 const Header_Maximum_Height = 200;
 
-const Header_Minimum_Height = 50;
+const Header_Minimum_Height = vh(10);
 export default class Home extends React.Component {
 
   constructor(props) {
@@ -107,7 +112,7 @@ export default class Home extends React.Component {
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
 
-        outputRange: ['#009688', '#00BCD4'],
+        outputRange: ['#7b1fa2', '#00BCD4'],
 
         extrapolate: 'clamp'
       });
@@ -133,7 +138,7 @@ export default class Home extends React.Component {
               },
             ]}>
             <Text style={styles.HeaderInsideText}>
-              List of React Native Elements
+              {entities.decode('SuForms-&Aacute;ngel.Pe&ntilde;a')}
           </Text>
           </Animated.View>
           <ScrollView
@@ -161,20 +166,19 @@ export default class Home extends React.Component {
           </ScrollView>
 
         </View>
-
-
         // <View style={{ width: 80, height: 80 }}>
         //   <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
         // </View>
         // <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
         // </View>
       );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>Has entrado!</Text>
+        </View>
+      );
     }
-    return (
-      <View style={styles.container}>
-        <Text>Has entrado!</Text>
-      </View>
-    );
   }
 }
 
@@ -195,7 +199,8 @@ const styles = StyleSheet.create({
 
   HeaderInsideText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: RFValue(25),
+    // fontWeight: "bold",
     textAlign: 'center',
   },
 
