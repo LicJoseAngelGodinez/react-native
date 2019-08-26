@@ -11,7 +11,9 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native';
+import Entities from 'html-entities';
 
+const entities = new Entities.AllHtmlEntities();
 export default class LoginView extends Component {
 
   constructor(props) {
@@ -28,6 +30,8 @@ export default class LoginView extends Component {
   async loadCredentials() {
     try {
         const credentials = await AsyncStorage.getItem('userData');
+        this.setState({ credentials: JSON.parse(credentials) });
+      
         if ( this.state.credentials.tkSesion ) {
 
           this.props.navigation.navigate('Home');
@@ -69,13 +73,6 @@ export default class LoginView extends Component {
     let urlIntegracion = 'https://api.salesup.com/login';
     let formData = new FormData();
 
-    if ( user == '' && password == '' ) {
-
-      user = 'angel@prueba.com';
-      password = 'Salesup2016!'
-
-    }
-
     formData.append('usuario', user);
     formData.append('contrasenia', password);
 
@@ -98,14 +95,14 @@ export default class LoginView extends Component {
 
         } else {
           this.ShowHideActivityIndicator();
-          Alert.alert('Acceso', 'El usuario y/o clave no es correcto.');
+          Alert.alert('Acceso', entities.decode('El usuario y/o contrase&ntilde;a no es correcto.'));
           return false;
 
         }
       })
       .catch((error) => {
         this.ShowHideActivityIndicator();
-        Alert.alert('Conexi�n', 'Al parecer hay un problema en la conexi�n, revisa tu acceso a datos o wifi.');
+        Alert.alert(entities.decode('Conexi&oacute;'), entities.decode('Al parecer hay un problema, revisa tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.'));
       });
   }
 
@@ -123,7 +120,7 @@ export default class LoginView extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/email.png' }} />
           <TextInput style={styles.inputs}
-            placeholder="Usuario"
+            placeholder={entities.decode('Correo electr&oacute;nico')}
             keyboardType="email-address"
             autoCapitalize = 'none'
             onChangeText={(user) => this.setState({ user })}
@@ -133,7 +130,7 @@ export default class LoginView extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/password.png' }} />
           <TextInput style={styles.inputs}
-            placeholder="Clave de acceso"
+            placeholder={entities.decode('Contrase&ntilde;a')}
             secureTextEntry={true}
             autoCapitalize = 'none'
             onChangeText={(password) => this.setState({ password })}
@@ -151,7 +148,7 @@ export default class LoginView extends Component {
           disabled={this.state.Isbuttonenable}
           style={styles.buttonContainer}
           onPress={() => this.onClickListener('recuperar_contrasenia')}>
-          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>Olvidó su contraseña?</Text>
+          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>{entities.decode('Olvid&oacute; su contrase&ntilde;a?')}</Text>
         </TouchableHighlight>
 
         <TouchableHighlight

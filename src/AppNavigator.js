@@ -7,21 +7,6 @@ import Home from './pages/Home';
 import Wait from './pages/Wait';
 
 const AppNavigator = createStackNavigator({
-    Home: {
-        screen: Home,
-        navigationOptions: {
-            title: 'Menu',
-            header: null,
-            headerLeft: null,
-            headerStyle: {
-                backgroundColor: '#7b1fa2',
-              },
-              headerTintColor: '#fff',
-              headerTitleStyle: {
-                fontWeight: 'bold',
-              },
-        },
-    },
     Wait: {
         screen: Wait,
         navigationOptions: {
@@ -32,6 +17,21 @@ const AppNavigator = createStackNavigator({
         screen: Login,
         navigationOptions: {
             header: null,
+        },
+    },
+    Home: {
+        screen: Home,
+        navigationOptions: {
+            title: 'Menu',
+            header: null,
+            headerLeft: null,
+            headerStyle: {
+                backgroundColor: '#7b1fa2',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                fontWeight: 'bold',
+                },
         },
     },
 });

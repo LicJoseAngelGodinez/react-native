@@ -10,6 +10,7 @@ import {
   ScrollView,
   Animated,
   Platform,
+  TouchableHighlight,
 } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
@@ -45,15 +46,15 @@ export default class Home extends React.Component {
     }
   }
 
-  remove_user = async () => {
-    try {
-      await AsyncStorage.removeItem('userData');
-      return true;
-    }
-    catch (exception) {
-      return false;
-    }
-  };
+  // remove_user = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('userData');
+  //     return true;
+  //   }
+  //   catch (exception) {
+  //     return false;
+  //   }
+  // };
 
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -80,13 +81,13 @@ export default class Home extends React.Component {
 
     Alert.alert(
       'Cerrar',
-      'Va a cerrar sesi�n, desea continuar?',
+      entities.decode('Va a cerrar sesi&oacute;n, desea continuar?'),
       [
         {
           text: 'Cancelar',
           onPress: () => {
             //this.remove_user();
-            console.log('Cancel�');
+            console.log(entities.decode('Cancel&oacute;'));
           },
           style: 'cancel',
         },
@@ -94,7 +95,7 @@ export default class Home extends React.Component {
           text: 'Cerrar',
           onPress: () => {
             console.log('OK Pressed');
-            this.props.navigation.popToTop();
+            this.props.navigation.navigate('Login');
             return true;
           }
         },
@@ -138,7 +139,7 @@ export default class Home extends React.Component {
               },
             ]}>
             <Text style={styles.HeaderInsideText}>
-              {entities.decode('SuForms-&Aacute;ngel.Pe&ntilde;a')}
+              {entities.decode('SuForms')}
           </Text>
           </Animated.View>
           <ScrollView
@@ -149,12 +150,12 @@ export default class Home extends React.Component {
             ])}>
             {/* Put all your Component here inside the ScrollView */}
             <Text style={styles.TextViewStyle}>Text</Text>
-            <Text style={styles.TextViewStyle}> Input</Text>
+            <Text style={styles.TextViewStyle}>Input</Text>
             <Text style={styles.TextViewStyle}>Button</Text>
             <Text style={styles.TextViewStyle}>Card</Text>
             <Text style={styles.TextViewStyle}>CheckBox</Text>
             <Text style={styles.TextViewStyle}>Divider</Text>
-            <Text style={styles.TextViewStyle}>Header</Text>
+            <Text style={styles.TextViewStyle}>Holi</Text>
             <Text style={styles.TextViewStyle}>List Item</Text>
             <Text style={styles.TextViewStyle}>Pricing</Text>
             <Text style={styles.TextViewStyle}>Rating</Text>
@@ -210,6 +211,28 @@ const styles = StyleSheet.create({
     fontSize: 18,
     margin: 5,
     padding: 7,
+  },
+
+  containerButtonCard: {
+    height: vh(10),
+    margin: 5
+  },
+
+  imageButtonCard: {
+    width: '100%', 
+    height: '100%',
+    marginBottom: 5,
+  },
+
+  buttonIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: 'center'
+  },
+
+  buttonText: {
+    
   },
 });
 
