@@ -31,8 +31,8 @@ export default class LoginView extends Component {
     try {
         const credentials = await AsyncStorage.getItem('userData');
         this.setState({ credentials: JSON.parse(credentials) });
-      
-        if ( this.state.credentials.tkSesion ) {
+        console.log({ Login_uData: credentials });
+        if ( credentials ) {
 
           this.props.navigation.navigate('Home');
 
