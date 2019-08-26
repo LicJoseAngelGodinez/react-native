@@ -4,34 +4,69 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   AsyncStorage,
   TouchableHighlight,
   Image,
   Alert,
-  Keyboard
+  Keyboard,
+  ActivityIndicator
 } from 'react-native';
+import Entities from 'html-entities';
 
+const entities = new Entities.AllHtmlEntities();
 export default class LoginView extends Component {
 
   constructor(props) {
     super(props);
-    state = {
+    this.state = {
       email: '',
       password: '',
+      isLoading: false,
+      Isbuttonenable: false,
+      credentials : ''
     }
+  }
+
+  async loadCredentials() {
+    try {
+        const credentials = await AsyncStorage.getItem('userData');
+        this.setState({ credentials: JSON.parse(credentials) });
+        console.log({ Login_uData: credentials });
+        if ( credentials ) {
+
+          this.props.navigation.navigate('Home');
+
+        }
+        
+    }
+    catch (error) {
+        // Manage error handling
+    }
+}
+
+  ShowHideActivityIndicator = () => {
+
+    if (this.state.isLoading == true) {
+      this.setState({ isLoading: false });
+      this.setState({ Isbuttonenable: false });
+    }
+    else {
+      this.setState({ isLoading: true });
+      this.setState({ Isbuttonenable: true });
+    }
+
   }
 
   onClickListener = (viewId) => {
     Keyboard.dismiss();
-    Alert.alert("Alert", "Button pressed " + viewId);
+    Alert.alert("Alerta", "Has presionado: " + viewId);
   }
 
   login = () => {
 
     const { user, password } = this.state;
 
-    //Alert.alert('Datos',token);
+    this.ShowHideActivityIndicator();
 
     Keyboard.dismiss();
 
@@ -53,38 +88,41 @@ export default class LoginView extends Component {
 
         if (responseJson[0].tkSesion) {
 
-          console.log({DATOS: responseJson[0]});
-          AsyncStorage.setItem('tkSession', JSON.stringify(responseJson[0]));
+          console.log({ DATOS: responseJson[0] });
+          AsyncStorage.setItem('userData', JSON.stringify(responseJson[0]));
+          this.ShowHideActivityIndicator();
           return this.props.navigation.navigate('Home');
 
         } else {
-
-          Alert.alert('Acceso', 'El usuario y/o clave no es correcto.');
+          this.ShowHideActivityIndicator();
+          Alert.alert('Acceso', entities.decode('El usuario y/o contrase&ntilde;a no es correcto.'));
           return false;
 
         }
       })
       .catch((error) => {
-        console.error(error);
-
+        this.ShowHideActivityIndicator();
+        Alert.alert(entities.decode('Conexi&oacute;'), entities.decode('Al parecer hay un problema, revisa tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.'));
       });
   }
 
   render() {
-    let pic = {
-      uri: 'https://s3-eu-west-1.amazonaws.com/cdn.supporthero.io/article/323/56a919b5-2be9-4cc6-adb9-c89b4693a74e.jpg'
-    };
     return (
       <View style={styles.container}>
+
+        {
+          this.state.isLoading ? <ActivityIndicator size="large" color="#7b1fa2" style={{ padding: 20 }} /> : null
+        }
+
         <View style={{ width: '70%' }}>
-          <Image source={pic} style={{ width: '100%', height: 100 }} />
+          <Image source={require('../../assets/letter-logo.jpg')} style={{ width: '100%', height: 100 }} />
         </View>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/email.png' }} />
           <TextInput style={styles.inputs}
-            placeholder="Usuario"
+            placeholder={entities.decode('Correo electr&oacute;nico')}
             keyboardType="email-address"
-            underlineColorAndroid='transparent'
+            autoCapitalize = 'none'
             onChangeText={(user) => this.setState({ user })}
           />
         </View>
@@ -92,24 +130,34 @@ export default class LoginView extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{ uri: 'https://img.icons8.com/nolan/64/000000/password.png' }} />
           <TextInput style={styles.inputs}
-            placeholder="Clave de acceso"
+            placeholder={entities.decode('Contrase&ntilde;a')}
             secureTextEntry={true}
-            underlineColorAndroid='transparent'
+            autoCapitalize = 'none'
             onChangeText={(password) => this.setState({ password })}
           />
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
+        <TouchableHighlight
+          disabled={this.state.Isbuttonenable}
+          style={!this.state.Isbuttonenable ? [styles.buttonContainer, styles.loginButton] : [styles.buttonContainer, styles.loginButtonDisabled]}
+          onPress={() => this.login()}>
           <Text style={{ color: '#FFFFFF' }}>Entrar</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('restore_password')}>
-          <Text style={styles.loginText}>Olvidó su contraseña?</Text>
+        <TouchableHighlight
+          disabled={this.state.Isbuttonenable}
+          style={styles.buttonContainer}
+          onPress={() => this.onClickListener('recuperar_contrasenia')}>
+          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>{entities.decode('Olvid&oacute; su contrase&ntilde;a?')}</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onClickListener('register')}>
-          <Text style={styles.loginText}>Registro</Text>
+        <TouchableHighlight
+          disabled={this.state.Isbuttonenable}
+          style={styles.buttonContainer}
+          onPress={() => this.onClickListener('registro')}>
+          <Text style={!this.state.Isbuttonenable ? styles.loginText : styles.loginTextDisabled}>Registro</Text>
         </TouchableHighlight>
+
       </View>
     );
   }
@@ -136,7 +184,6 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
@@ -157,7 +204,13 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#7b1fa2",
   },
+  loginButtonDisabled: {
+    backgroundColor: "#CDCDCD",
+  },
   loginText: {
     color: '#7b1fa2',
+  },
+  loginTextDisabled: {
+    color: '#CDCDCD',
   }
 });
