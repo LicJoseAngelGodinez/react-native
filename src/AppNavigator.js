@@ -5,6 +5,7 @@ import {
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Wait from './pages/Wait';
+import Integrations from './pages/Integrations';
 
 const AppNavigator = createStackNavigator({
     Home: {
@@ -30,6 +31,12 @@ const AppNavigator = createStackNavigator({
     },
     Login: {
         screen: Login,
+        navigationOptions: {
+            header: null,
+        },
+    },
+    Integrations: {
+        screen: Integrations,
         navigationOptions: {
             header: null,
         },

@@ -80,29 +80,7 @@ export default class Home extends React.Component {
 
   handleBackButtonClick() {
 
-    Alert.alert(
-      'Cerrar',
-      entities.decode('Va a cerrar sesi&oacute;n, desea continuar?'),
-      [
-        {
-          text: 'Cancelar',
-          onPress: () => {
-            //this.remove_user();
-            console.log(entities.decode('Cancel&oacute;'));
-          },
-          style: 'cancel',
-        },
-        {
-          text: 'Cerrar',
-          onPress: () => {
-            console.log('OK Pressed');
-            this.props.navigation.navigate('Login');
-            return true;
-          }
-        },
-      ],
-      { cancelable: true },
-    );
+    this.props.navigation.navigate('Home');
     return true;
 
   }
@@ -150,7 +128,7 @@ export default class Home extends React.Component {
               },
             ]}>
             <Text style={styles.HeaderInsideText}>
-              {entities.decode('SuForms')}
+              {entities.decode('Integraciones')}
           </Text>
           </Animated.View>
           <ScrollView
@@ -160,15 +138,6 @@ export default class Home extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Integrations')}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-              <Text style={styles.TextStyle}> Integraciones </Text>
-      
-            </TouchableOpacity>
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
  
               <Image 
