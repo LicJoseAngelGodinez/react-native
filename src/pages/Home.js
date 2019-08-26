@@ -1,10 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View, AsyncStorage, Alert, BackHandler, Image, } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage,
+  Alert,
+  BackHandler,
+  Image,
+  ScrollView,
+  Animated,
+  Platform,
+} from 'react-native';
 
+const Header_Maximum_Height = 200;
+
+const Header_Minimum_Height = 50;
 export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
+    this.AnimatedHeaderValue = new Animated.Value(0);
     this.state = {
       username: null,
       credentials: null
@@ -87,14 +102,72 @@ export default class Home extends React.Component {
 
   render() {
     const { username, credentials } = this.state;
+
+    const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
+      {
+        inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
+
+        outputRange: ['#009688', '#00BCD4'],
+
+        extrapolate: 'clamp'
+      });
+
+    const AnimateHeaderHeight = this.AnimatedHeaderValue.interpolate(
+      {
+        inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
+
+        outputRange: [Header_Maximum_Height, Header_Minimum_Height],
+
+        extrapolate: 'clamp'
+      });
+
     if (username != null) {
       return (
-        <View style={styles.container}>
-          <View style={{ width: 80, height: 80 }}>
-            <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
-          </View>
-          <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
+        <View style={styles.MainContainer}>
+          <Animated.View
+            style={[
+              styles.Header,
+              {
+                height: AnimateHeaderHeight,
+                backgroundColor: AnimateHeaderBackgroundColor,
+              },
+            ]}>
+            <Text style={styles.HeaderInsideText}>
+              List of React Native Elements
+          </Text>
+          </Animated.View>
+          <ScrollView
+            scrollEventThrottle={16}
+            contentContainerStyle={{ paddingTop: Header_Maximum_Height }}
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
+            ])}>
+            {/* Put all your Component here inside the ScrollView */}
+            <Text style={styles.TextViewStyle}>Text</Text>
+            <Text style={styles.TextViewStyle}> Input</Text>
+            <Text style={styles.TextViewStyle}>Button</Text>
+            <Text style={styles.TextViewStyle}>Card</Text>
+            <Text style={styles.TextViewStyle}>CheckBox</Text>
+            <Text style={styles.TextViewStyle}>Divider</Text>
+            <Text style={styles.TextViewStyle}>Header</Text>
+            <Text style={styles.TextViewStyle}>List Item</Text>
+            <Text style={styles.TextViewStyle}>Pricing</Text>
+            <Text style={styles.TextViewStyle}>Rating</Text>
+            <Text style={styles.TextViewStyle}>Search Bar</Text>
+            <Text style={styles.TextViewStyle}>Slider</Text>
+            <Text style={styles.TextViewStyle}>Tile</Text>
+            <Text style={styles.TextViewStyle}>Icon</Text>
+            <Text style={styles.TextViewStyle}>Avatar</Text>
+          </ScrollView>
+
         </View>
+
+
+        // <View style={{ width: 80, height: 80 }}>
+        //   <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
+        // </View>
+        // <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
+        // </View>
       );
     }
     return (
@@ -106,11 +179,32 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  MainContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    paddingTop: Platform.OS == 'ios' ? 20 : 0,
+  },
+
+  Header: {
     justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: Platform.OS == 'ios' ? 20 : 0,
+  },
+
+  HeaderInsideText: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+
+  TextViewStyle: {
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 18,
+    margin: 5,
+    padding: 7,
   },
 });
 

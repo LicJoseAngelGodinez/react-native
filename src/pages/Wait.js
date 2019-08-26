@@ -77,16 +77,12 @@ export default class Wait extends React.Component {
             <View 
                 style={styles.container}
             >
-                <View style={{ width: '70%' }}>
-                    <Image source={require('../../assets/white-simple-logo.jpg')} style={{ width: '100%' }} />
-                </View>
-                <View 
-                    style={styles.container}
-                >
-                    <ActivityIndicator 
-                    size="large"
-                    color="#7b1fa2"
-                    style={{ padding: 20 }}/>
+                <ActivityIndicator 
+                size="large"
+                color="#7b1fa2"
+                style={{ padding: 20 }}/>
+                <View style={{ width: 80, height: 80 }}>
+                    <Image source={require('../../assets/white-simple-logo.jpg')} style={{ width: '100%', height: '100%' }}/>
                 </View>
             </View>
         );
