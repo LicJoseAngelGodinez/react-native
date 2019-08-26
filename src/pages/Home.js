@@ -167,7 +167,7 @@ export default class Home extends React.Component {
                 source={require('../../assets/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
-              <Text style={styles.TextStyle}> Integraciones </Text>
+              <Text style={styles.TextStyle}> {entities.decode('Tokens de integraci&oacute;n')} </Text>
       
             </TouchableOpacity>
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
