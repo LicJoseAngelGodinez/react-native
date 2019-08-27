@@ -51,6 +51,7 @@ export default class Home extends React.Component {
   async removeUserData() {
     try {
       await AsyncStorage.removeItem('userData');
+      await AsyncStorage.removeItem('dataTokens');
     } catch (error) {
       
     }
