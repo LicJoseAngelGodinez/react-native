@@ -12,6 +12,7 @@ import {
   Platform,
   TouchableOpacity,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
@@ -29,7 +30,10 @@ export default class Home extends React.Component {
     this.AnimatedHeaderValue = new Animated.Value(0);
     this.state = {
       username: null,
-      credentials: null
+      credentials: null,
+      tkSesion: null,
+      isLoading: true,
+      dataTokens: {},
     };
     this.loadCredentials();
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -38,13 +42,81 @@ export default class Home extends React.Component {
   async loadCredentials() {
     try {
       const credentials = await AsyncStorage.getItem('userData');
-      console.log({ uData: JSON.parse(credentials) });
+      const dataTokens = await AsyncStorage.getItem('dataTokens');
       this.setState({ credentials: JSON.parse(credentials) });
+      this.setState({tkSesion: this.state.credentials.tkSesion});
       this.setState({ username: this.state.credentials.nombre + ' ' + this.state.credentials.apellidos });
+      if ( dataTokens != null ) {
+        this.setState({dataTokens: JSON.parse(dataTokens)});
+        this.ShowHideActivityIndicator();
+      } else {
+        this.loadTokens();
+      }
     }
     catch (error) {
       // Manage error handling
     }
+  }
+
+  ShowHideActivityIndicator = () => {
+
+    if (this.state.isLoading == true) {
+      this.setState({ isLoading: false });
+    }
+    else {
+      this.setState({ isLoading: true });
+    }
+
+  }
+
+  loadTokens = () => {
+    const { tkSesion } = this.state;
+
+    //this.ShowHideActivityIndicator();
+
+    let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
+    let formData = new FormData();
+
+    formData.append("pagina", 0);
+
+    let dataHeader = {
+      method: 'GET',
+      headers: {
+        "token": tkSesion
+      }
+    };
+
+    fetch(urlIntegracion, dataHeader)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if ( responseJson ) {
+          let dataTemp = responseJson.filter(function(item){ 
+            return item.tipoIntegracion == 7 || item.tipoIntegracion == 8; 
+          });
+          
+          console.log({response: dataTemp.length});
+          AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
+          this.setState({dataTokens: dataTemp});
+
+          this.ShowHideActivityIndicator();
+
+        } else {
+          this.ShowHideActivityIndicator();
+          Alert.alert('Acceso', entities.decode('El usuario y/o contrase&ntilde;a no es correcto.'));
+          return false;
+        }
+      })
+      .catch((error) => {
+        //Alert.alert(entities.decode('Error'), entities.decode('Al parecer hay un problema, revisa tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.'));
+      });
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   // remove_user = async () => {
@@ -56,14 +128,6 @@ export default class Home extends React.Component {
   //     return false;
   //   }
   // };
-
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
 
   // static navigationOptions = () => ({
   //   headerTintColor: 'white',
@@ -87,7 +151,7 @@ export default class Home extends React.Component {
 
   toast = (buttonId) => {    
     ToastAndroid.showWithGravityAndOffset(
-      'A wild toast appeared! Toco: ' + buttonId,
+      buttonId,
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       25,
@@ -96,108 +160,59 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { username, credentials } = this.state;
+    
+    const { dataTokens } = this.state;
 
-    const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
-      {
-        inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
-
-        outputRange: ['#7b1fa2', '#00BCD4'],
-
-        extrapolate: 'clamp'
-      });
-
-    const AnimateHeaderHeight = this.AnimatedHeaderValue.interpolate(
-      {
-        inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
-
-        outputRange: [Header_Maximum_Height, Header_Minimum_Height],
-
-        extrapolate: 'clamp'
-      });
-
-    if (username != null) {
+    if (!this.state.isLoading && dataTokens.length) {
+  
+      const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
+        {
+          inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
+  
+          outputRange: ['#7b1fa2', '#00BCD4'],
+  
+          extrapolate: 'clamp'
+        });
+  
+      const AnimateHeaderHeight = this.AnimatedHeaderValue.interpolate(
+        {
+          inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
+  
+          outputRange: [Header_Maximum_Height, Header_Minimum_Height],
+  
+          extrapolate: 'clamp'
+        });
       return (
         <View style={styles.MainContainer}>
-          <Animated.View
-            style={[
-              styles.Header,
-              {
-                height: AnimateHeaderHeight,
-                backgroundColor: AnimateHeaderBackgroundColor,
-              },
-            ]}>
-            <Text style={styles.HeaderInsideText}>
-              {entities.decode('Integraciones')}
-          </Text>
-          </Animated.View>
+          
           <ScrollView
             scrollEventThrottle={16}
-            contentContainerStyle={{ paddingTop: Header_Maximum_Height }}
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
+            {
+              dataTokens.map( element => {
+                return (
+                  <TouchableOpacity key={element.indice} style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast(element.config.nombre ? element.config.nombre +' / '+element.tkIntegracion : element.tkIntegracion)}>
  
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> Formularios </Text>
+              <View style={{flexDirection: 'row'}}>
+                <View>
+                  <Image 
+                  source={require('../../assets/mainMenuIcons/icon07-64.png')} 
+                  style={styles.ImageIconStyle} 
+                  />
+                </View>
+                <View style={{paddingTop: 3, flex: 1, paddingRight: 10 }}>
+                  <Text style={{textAlign: 'right', fontSize: 18}}>{element.config.nombre ? element.config.nombre : '- Sin nombre -'}</Text>
+                  <Text style={{textAlign: 'right', fontSize: 12, fontStyle: 'italic'}}>{element.tkIntegracion}</Text>
+                </View>
+              </View>
       
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Nuevo formulario')}>
- 
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> Nuevo formulario </Text>
-      
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> {entities.decode('Configuraci&oacute;n')} </Text>
-      
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> Opciones extra 1 </Text>
-      
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> Opciones extra 2 </Text>
-      
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
-                />
-      
-              <Text style={styles.TextStyle}> Opciones extra 3 </Text>
-      
-            </TouchableOpacity>
+                );
+              })
+            }
           </ScrollView>
 
         </View>
@@ -210,7 +225,7 @@ export default class Home extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <Text>Has entrado!</Text>
+          <ActivityIndicator size="large" color="#7b1fa2" style={{ padding: 20 }} />
         </View>
       );
     }
@@ -272,15 +287,15 @@ const styles = StyleSheet.create({
     borderWidth: .5,
     borderColor: '#7b1fa2',
     height: 60,
-    borderRadius: 5 ,
-    margin: 3,   
+    borderRadius: 3 ,
+    margin: 4,   
   },
    
   ImageIconStyle: {
      padding: 20,
      margin: 5,
-     height: '90%',
-     width: vw(13),
+     height: 40,
+     width: 40,
      resizeMode : 'stretch',
    
   },

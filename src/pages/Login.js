@@ -71,7 +71,7 @@ export default class LoginView extends Component {
 
     Keyboard.dismiss();
 
-    let urlIntegracion = 'https://api.salesup.com/login';
+    let loginURL = 'https://api.salesup.com/login';
     let formData = new FormData();
 
     formData.append('usuario', user);
@@ -82,7 +82,7 @@ export default class LoginView extends Component {
       body: formData
     };
 
-    fetch(urlIntegracion, dataHeader)
+    fetch(loginURL, dataHeader)
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson[0].token);
