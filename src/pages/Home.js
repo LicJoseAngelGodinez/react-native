@@ -16,6 +16,7 @@ import {
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import Entities from 'html-entities';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const entities = new Entities.AllHtmlEntities();
 
@@ -107,7 +108,7 @@ export default class Home extends React.Component {
 
   }
 
-  toast = (buttonId) => {    
+  toast = (buttonId) => {
     ToastAndroid.showWithGravityAndOffset(
       'A wild toast appeared! Toco: ' + buttonId,
       ToastAndroid.SHORT,
@@ -138,6 +139,10 @@ export default class Home extends React.Component {
         extrapolate: 'clamp'
       });
 
+    const colors = ['#FFF', '#b388ff', '#7b1fa2'];
+
+    const startGradient = [0.0000090, 0.91];
+
     if (username != null) {
       return (
         <View style={styles.MainContainer}>
@@ -149,10 +154,10 @@ export default class Home extends React.Component {
                 backgroundColor: AnimateHeaderBackgroundColor,
               },
             ]}>
-              
+
             <Text style={styles.HeaderInsideText}>
               {entities.decode('SalesUp! Forms')}
-          </Text>
+            </Text>
           </Animated.View>
           <ScrollView
             scrollEventThrottle={16}
@@ -161,74 +166,106 @@ export default class Home extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Integrations')}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Integrations')}>
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon03-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-              <Text style={styles.TextStyle}> {entities.decode('Tokens de integraci&oacute;n')} </Text>
-      
+                <Text style={styles.TextStyle}> {entities.decode('Tokens de integraci&oacute;n')} </Text>
+
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
+
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon05-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> Formularios </Text>
-      
+
+                <Text style={styles.TextStyle}> Formularios </Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Nuevo formulario')}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.toast('Nuevo formulario')}>
+
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon00-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> Nuevo formulario </Text>
-      
+
+                <Text style={styles.TextStyle}> Nuevo formulario </Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5}>
+
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon04-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> {entities.decode('Configuraci&oacute;n')} </Text>
-      
+
+                <Text style={styles.TextStyle}> {entities.decode('Configuraci&oacute;n')} </Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5}>
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon06-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> Opciones extra 1 </Text>
-      
+
+                <Text style={styles.TextStyle}> Soporte </Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5}>
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon02-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> Opciones extra 2 </Text>
-      
+
+                <Text style={styles.TextStyle}> Opciones extra 1 </Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
- 
-              <Image 
-                source={require('../../assets/icon00-64.png')} 
-                style={styles.ImageIconStyle} 
+            <TouchableOpacity activeOpacity={0.5}>
+              <LinearGradient
+                style={styles.mainMenuButton}
+                colors={colors}
+                start={startGradient}
+              >
+                <Image
+                  source={require('../../assets/mainMenuIcons/icon01-64.png')}
+                  style={styles.ImageIconStyle}
                 />
-      
-              <Text style={styles.TextStyle}> Opciones extra 3 </Text>
-      
+
+                <Text style={styles.TextStyle}> Opciones extra 2 </Text>
+              </LinearGradient>
             </TouchableOpacity>
           </ScrollView>
 
@@ -285,7 +322,7 @@ const styles = StyleSheet.create({
   },
 
   imageButtonCard: {
-    width: '100%', 
+    width: '100%',
     height: '100%',
     marginBottom: 5,
   },
@@ -297,14 +334,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 
-  FacebookStyle: {
+  mainMenuButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderWidth: .5,
     borderColor: '#7b1fa2',
     height: 100,
-    borderRadius: 5 ,
+    borderRadius: 5,
     margin: 5,
     shadowColor: 'rgba(0,0,0, .4)', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
@@ -312,23 +348,23 @@ const styles = StyleSheet.create({
     shadowRadius: 1, //IOS
     elevation: 3, // Android   
   },
-   
+
   ImageIconStyle: {
-     padding: 20,
-     margin: 5,
-     height: 40,
-     width: 40,
-     resizeMode : 'stretch',
-   
+    padding: 20,
+    margin: 5,
+    height: 40,
+    width: 40,
+    resizeMode: 'stretch',
+
   },
-   
-  TextStyle :{
-   
+
+  TextStyle: {
+
     fontSize: vmax(2.5),
     color: "#7b1fa2",
-    marginBottom : 4,
-    marginRight :20,
-    
+    marginBottom: 4,
+    marginRight: 20,
+
   },
 });
 

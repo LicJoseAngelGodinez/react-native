@@ -141,7 +141,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
@@ -151,7 +151,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast('Nuevo formulario')}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
@@ -161,7 +161,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
@@ -171,7 +171,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
@@ -181,7 +181,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
@@ -191,7 +191,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.FacebookStyle} activeOpacity={0.5}>
  
               <Image 
-                source={require('../../assets/icon00-64.png')} 
+                source={require('../../assets/mainMenuIcons/icon00-64.png')} 
                 style={styles.ImageIconStyle} 
                 />
       
