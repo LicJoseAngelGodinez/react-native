@@ -22,8 +22,9 @@ export default class Wait extends React.Component {
 
     async loadCredentials() {
         try {
-            const credentials = await AsyncStorage.getItem('userData');
-            if ( this.state.credentials.tkSesion ) {
+            let credentials = await AsyncStorage.getItem('userData');
+            let credentialsObj = JSON.parse(credentials);
+            if ( credentialsObj.tkSesion !== null ) {
                 this.props.navigation.navigate('Home');
             } else {
                 this.props.navigation.navigate('Login');

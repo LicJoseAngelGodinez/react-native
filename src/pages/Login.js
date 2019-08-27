@@ -25,6 +25,7 @@ export default class LoginView extends Component {
       Isbuttonenable: false,
       credentials : ''
     }
+    this.loadCredentials();
   }
 
   async loadCredentials() {

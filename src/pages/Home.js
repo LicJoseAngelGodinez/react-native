@@ -48,6 +48,14 @@ export default class Home extends React.Component {
     }
   }
 
+  async removeUserData() {
+    try {
+      await AsyncStorage.removeItem('userData');
+    } catch (error) {
+      
+    }
+  }
+
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
@@ -73,6 +81,7 @@ export default class Home extends React.Component {
           text: 'Cerrar',
           onPress: () => {
             console.log('OK Pressed');
+            this.removeUserData();
             this.props.navigation.navigate('Login');
             return true;
           }
