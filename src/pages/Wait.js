@@ -26,7 +26,7 @@ export default class Wait extends React.Component {
             let credentialsObj = JSON.parse(credentials);
             if ( credentialsObj.tkSesion !== null ) {
                 //this.props.navigation.navigate('Home');
-                this.props.navigation.navigate('Home');
+                this.props.navigation.navigate('Integrations');
             } else {
                 this.props.navigation.navigate('Login');
             }

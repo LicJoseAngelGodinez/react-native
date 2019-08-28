@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
@@ -62,6 +63,7 @@ export default class Home extends React.Component {
 
     if (this.state.isLoading == true) {
       this.setState({ isLoading: false });
+
     }
     else {
       this.setState({ isLoading: true });
@@ -72,7 +74,7 @@ export default class Home extends React.Component {
   loadTokens = () => {
     const { tkSesion } = this.state;
 
-    //this.ShowHideActivityIndicator();
+    this.ShowHideActivityIndicator();
 
     let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
     let formData = new FormData();
@@ -97,7 +99,6 @@ export default class Home extends React.Component {
           console.log({response: dataTemp.length});
           AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
           this.setState({dataTokens: dataTemp});
-
           this.ShowHideActivityIndicator();
 
         } else {
@@ -107,7 +108,7 @@ export default class Home extends React.Component {
         }
       })
       .catch((error) => {
-        //Alert.alert(entities.decode('Error'), entities.decode('Al parecer hay un problema, revisa tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.'));
+        Alert.alert(entities.decode('Error'), entities.decode('Al parecer hay un problema, revisa tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.'));
       });
   }
 
@@ -118,29 +119,6 @@ export default class Home extends React.Component {
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
-
-  // remove_user = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('userData');
-  //     return true;
-  //   }
-  //   catch (exception) {
-  //     return false;
-  //   }
-  // };
-
-  // static navigationOptions = () => ({
-  //   headerTintColor: 'white',
-  //   title: 'Inicio',
-  //   headerTitleStyle: {
-  //     textAlign: 'center',
-  //     alignSelf: 'center',
-  //     color: 'white'
-  //   },
-  //   headerStyle: {
-  //     backgroundColor: '#7b1fa2',
-  //   },
-  // });
 
   handleBackButtonClick() {
 
@@ -159,38 +137,34 @@ export default class Home extends React.Component {
     );
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    fetchData().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
+
   render() {
     
     const { dataTokens } = this.state;
 
-    if (!this.state.isLoading && dataTokens.length) {
+    if (!this.state.isLoading && dataTokens.length > 0) {
   
-      const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
-        {
-          inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
-  
-          outputRange: ['#7b1fa2', '#00BCD4'],
-  
-          extrapolate: 'clamp'
-        });
-  
-      const AnimateHeaderHeight = this.AnimatedHeaderValue.interpolate(
-        {
-          inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
-  
-          outputRange: [Header_Maximum_Height, Header_Minimum_Height],
-  
-          extrapolate: 'clamp'
-        });
+      
       return (
         <View style={styles.MainContainer}>
           
           <ScrollView
             scrollEventThrottle={16}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isLoading}
+                onRefresh={this.loadTokens}
+              />
+            }
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
-            {/* Put all your Component here inside the ScrollView */}
             {
               dataTokens.map( element => {
                 return (
@@ -216,11 +190,6 @@ export default class Home extends React.Component {
           </ScrollView>
 
         </View>
-        // <View style={{ width: 80, height: 80 }}>
-        //   <Image source={{ uri: credentials.logo }} style={{ width: '100%', height: '100%' }} />
-        // </View>
-        // <Text>{"\n"}{"\n"}{"\n"}Saludos {username}!{"\n"}Has entrado!</Text>
-        // </View>
       );
     } else {
       return (
