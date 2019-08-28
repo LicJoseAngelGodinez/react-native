@@ -39,9 +39,8 @@ export default class Home extends React.Component {
   async loadCredentials() {
     try {
       const credentials = await AsyncStorage.getItem('userData');
-      console.log({ uData: JSON.parse(credentials) });
+      console.log({credentials: credentials});
       this.setState({ credentials: JSON.parse(credentials) });
-      this.setState({ username: this.state.credentials.nombre + ' ' + this.state.credentials.apellidos });
     }
     catch (error) {
       // Manage error handling
@@ -50,10 +49,12 @@ export default class Home extends React.Component {
 
   async removeUserData() {
     try {
-      await AsyncStorage.removeItem('userData');
-      await AsyncStorage.removeItem('dataTokens');
+      AsyncStorage.setItem('userData', null);
+      AsyncStorage.setItem('dataTokens', null);
+      this.setState(Object.assign(...Object.keys(this.state).map(k => ({[k]: null}))))
+      this.props.navigation.navigate('Login');
     } catch (error) {
-      
+      this.props.navigation.navigate('Login');
     }
   }
 
@@ -81,9 +82,8 @@ export default class Home extends React.Component {
         {
           text: 'Cerrar',
           onPress: () => {
-            console.log('OK Pressed');
-            this.removeUserData();
-            this.props.navigation.navigate('Login');
+            console.log('OK presionado');
+            this.removeUserData();            
             return true;
           }
         },
@@ -106,7 +106,13 @@ export default class Home extends React.Component {
 
   render() {
     const { username, credentials } = this.state;
-
+    let userName = null;
+    
+    if ( credentials != null ) {      
+      userName = this.state.credentials.nombre + ' ' + this.state.credentials.apellidos;
+    }
+    
+    console.log({cred: credentials, usr: userName});
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
@@ -129,7 +135,7 @@ export default class Home extends React.Component {
 
     const startGradient = [0.0000090, 0.91];
 
-    if (username != null) {
+    if (userName != null) {
       return (
         <View style={styles.MainContainer}>
           <Animated.View
@@ -142,7 +148,7 @@ export default class Home extends React.Component {
             ]}>
 
             <Text style={styles.HeaderInsideText}>
-              {entities.decode('SalesUp! Forms')}
+              {entities.decode(userName)}
             </Text>
           </Animated.View>
           <ScrollView

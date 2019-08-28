@@ -32,8 +32,8 @@ export default class LoginView extends Component {
     try {
         const credentials = await AsyncStorage.getItem('userData');
         this.setState({ credentials: JSON.parse(credentials) });
-        console.log({ Login_uData: credentials });
-        if ( credentials ) {
+        console.log({CREDENTIALS: credentials});
+        if ( credentials != null) {
 
           this.props.navigation.navigate('Home');
 
@@ -85,13 +85,11 @@ export default class LoginView extends Component {
     fetch(loginURL, dataHeader)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson[0].token);
 
         if (responseJson[0].tkSesion) {
-
-          console.log({ DATOS: responseJson[0] });
           AsyncStorage.setItem('userData', JSON.stringify(responseJson[0]));
-          this.ShowHideActivityIndicator();
+          this.setState({ isLoading: false });
+          this.setState({ Isbuttonenable: false });
           return this.props.navigation.navigate('Home');
 
         } else {

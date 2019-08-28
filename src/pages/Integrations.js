@@ -30,11 +30,12 @@ export default class Home extends React.Component {
     super(props);
     this.AnimatedHeaderValue = new Animated.Value(0);
     this.state = {
-      username: null,
       credentials: null,
       tkSesion: null,
       isLoading: true,
-      dataTokens: {},
+      isSelected: false,
+      dataTokens: null,
+      selectedToken: '',
     };
     this.loadCredentials();
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -42,15 +43,29 @@ export default class Home extends React.Component {
 
   async loadCredentials() {
     try {
-      const credentials = await AsyncStorage.getItem('userData');
-      const dataTokens = await AsyncStorage.getItem('dataTokens');
-      this.setState({ credentials: JSON.parse(credentials) });
-      this.setState({tkSesion: this.state.credentials.tkSesion});
-      this.setState({ username: this.state.credentials.nombre + ' ' + this.state.credentials.apellidos });
-      if ( dataTokens != null ) {
+      try {
+        const credentials = await AsyncStorage.getItem('userData');
+        this.setState({credentials: JSON.parse(credentials)});
+        this.setState({tkSesion: this.state.credentials.tkSesion});
+        
+      } catch (error) {
+        
+      }
+      try {
+        const dataTokens = await AsyncStorage.getItem('dataTokens');
         this.setState({dataTokens: JSON.parse(dataTokens)});
-        this.ShowHideActivityIndicator();
-      } else {
+        
+      } catch (error) {
+        
+      }
+      try {
+        const selectedToken = await AsyncStorage.getItem('tokenSelected');
+        this.setState({selectedToken: selectedToken});
+        
+      } catch (error) {
+        
+      }
+      if ( dataTokens == null ) {
         this.loadTokens();
       }
     }
@@ -63,18 +78,14 @@ export default class Home extends React.Component {
 
     if (this.state.isLoading == true) {
       this.setState({ isLoading: false });
-
     }
     else {
       this.setState({ isLoading: true });
     }
-
   }
 
   loadTokens = () => {
     const { tkSesion } = this.state;
-
-    this.ShowHideActivityIndicator();
 
     let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
     let formData = new FormData();
@@ -96,7 +107,6 @@ export default class Home extends React.Component {
             return item.tipoIntegracion == 7 || item.tipoIntegracion == 8; 
           });
           
-          console.log({response: dataTemp.length});
           AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
           this.setState({dataTokens: dataTemp});
           this.ShowHideActivityIndicator();
@@ -127,14 +137,10 @@ export default class Home extends React.Component {
 
   }
 
-  toast = (buttonId) => {    
-    ToastAndroid.showWithGravityAndOffset(
-      buttonId,
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      25,
-      50,
-    );
+  selectToken = (buttonId) => {   
+
+    this.setState({selectedToken: buttonId});
+    AsyncStorage.setItem('tokenSelected', buttonId);
   }
 
   _onRefresh = () => {
@@ -148,7 +154,7 @@ export default class Home extends React.Component {
     
     const { dataTokens } = this.state;
 
-    if (!this.state.isLoading && dataTokens.length > 0) {
+    if (!this.state.isLoading && dataTokens && dataTokens.length > 0) {
   
       
       return (
@@ -168,7 +174,7 @@ export default class Home extends React.Component {
             {
               dataTokens.map( element => {
                 return (
-                  <TouchableOpacity key={element.indice} style={styles.FacebookStyle} activeOpacity={0.5} onPress={() => this.toast(element.config.nombre ? element.config.nombre +' / '+element.tkIntegracion : element.tkIntegracion)}>
+                  <TouchableOpacity key={element.tkIntegracion} style={this.state.selectedToken == element.tkIntegracion ? styles.tokenElementSelected : styles.tokenElement } activeOpacity={0.5} onPress={() => this.selectToken(element.tkIntegracion)}>
  
               <View style={{flexDirection: 'row'}}>
                 <View>
@@ -249,10 +255,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 
-  FacebookStyle: {
+  tokenElement: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
+    borderWidth: .5,
+    borderColor: '#7b1fa2',
+    height: 60,
+    borderRadius: 3 ,
+    margin: 4,   
+  },
+
+  tokenElementSelected: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e040fb',
     borderWidth: .5,
     borderColor: '#7b1fa2',
     height: 60,
